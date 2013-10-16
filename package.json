@@ -8,11 +8,14 @@
   "bin": {
     "webtail": "node ./webtail.js"
   },
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oxtoacart/webtail"
+  },
   "keywords": [
-    "Node.js",
-    "Eclipse",
-    "Nodeclipse"
+    "tail",
+    "cli",
+    "web"
   ],
   "dependencies": {
     "optimist": "0.6.0",

@@ -1,3 +1,5 @@
+#!/usr/bin/env node 
+
 var argv = require('optimist')
             .usage('Usage: $0 --url [url to webtail]')
             .demand(['url'])

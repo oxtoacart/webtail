@@ -5,11 +5,14 @@ var argv = require('optimist')
             .demand(['url'])
             .argv;
 
+var urlRegex = /(https?:\/\/?[^/]+)\/(.+)/;
+
 configureReader(connect());
 
 function connect() {
   var url = argv.url;
   var parsedUrl = parseUrl(url);
+  console.log("connecting to", parsedUrl);
   var socket = require('socket.io-client').connect(parsedUrl.server);
   socket.on('ready', function() {
     console.log('Tailing to ', url);
@@ -20,10 +23,14 @@ function connect() {
 }
 
 function parseUrl(url) {
-  var lastSlash = url.lastIndexOf('/');
+  var match = urlRegex.exec(url);
+  if (!match) {
+    console.log("Please supply a valid url like 'http://webtail.me/Ad23Df3d'");
+    process.exit(1);
+  }
   return {
-    server: url.substring(0, lastSlash),
-    id: url.substring(lastSlash + 1)
+    server: match[1],
+    id: match[2]
   };
 }
 

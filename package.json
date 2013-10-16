@@ -1,0 +1,25 @@
+{
+  "name": "webtail",
+  "version": "0.0.1",
+  "author": "Ox Cart <ox.to.a.cart@gmail.com>",
+  "license": "BSD",
+  "description": "Client for webtail.me",
+  "main": "./webtail.js",
+  "bin": {
+    "webtail": "node ./webtail.js"
+  },
+  "repository": "",
+  "keywords": [
+    "Node.js",
+    "Eclipse",
+    "Nodeclipse"
+  ],
+  "dependencies": {
+    "optimist": "0.6.0",
+    "socket.io": "0.9.16"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "readmeFilename": "README.md"
+}

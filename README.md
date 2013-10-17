@@ -2,8 +2,8 @@
 
 ## Objective
 
-Client for the webtail.me service.  This service allows sharing tailed files
-over the internet.
+webtail.me allows you to tail your file to the web for sharing with other
+people.  `webtail` is the command-line client for doing this.
 
 ## Installation
 
@@ -11,13 +11,19 @@ over the internet.
 
 ## Usage
 
-  1. Pick an unused url on webtail.me, e.g. http://webtail.me/ox/523433
-  2. Point a browser or curl at that url, e.g. `curl http://webtail.me/ox/523433`
-  3. Start tailing
-  
-`tail -1000lf logfile.txt | webtail --url http://webtail.me/ox/523433`
+Pick an unused url on webtail.me
+    
+    http://webtail.me/ox/523433
 
-For https, right now you need to use http://webtail.jit.su
+Point a browser or curl at that url
+
+    `curl http://webtail.me/ox/523433`
+    
+Start tailing
+  
+    `tail -1000lf logfile.txt | webtail --url http://webtail.me/ox/523433`
+
+For HTTPS, right now you need to use http://webtail.jit.su.
 
 ### Tools
 

@@ -12,7 +12,6 @@ configureReader(connect());
 function connect() {
   var url = argv.url;
   var parsedUrl = parseUrl(url);
-  console.log("connecting to", parsedUrl);
   var socket = require('socket.io-client').connect(parsedUrl.server);
   socket.on('ready', function() {
     console.log('Tailing to ', url);

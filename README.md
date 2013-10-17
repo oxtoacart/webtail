@@ -17,6 +17,8 @@ over the internet.
   
 `tail -1000lf logfile.txt | webtail --url http://webtail.me/ox/523433`
 
+For https, right now you need to use http://webtail.jit.su
+
 ### Tools
 
 Created with [Nodeclipse](https://github.com/Nodeclipse/nodeclipse-1)

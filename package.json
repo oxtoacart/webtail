@@ -1,6 +1,6 @@
 {
   "name": "webtail",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Ox Cart <ox.to.a.cart@gmail.com>",
   "license": "BSD",
   "description": "Client for webtail.me",

@@ -6,11 +6,9 @@ webtail.me allows you to tail files to the web for sharing with other people.
 
 `webtail` is the command-line client for doing this.
 
-## Prerequisites
-
-[nodejs](http://nodejs.org/)
-
 ## Installation
+
+Requires [nodejs](http://nodejs.org/)
 
 `npm install webtail`
 

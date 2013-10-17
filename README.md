@@ -11,17 +11,15 @@ people.  `webtail` is the command-line client for doing this.
 
 ## Usage
 
-Pick an unused url on webtail.me
-    
-    http://webtail.me/ox/523433
+Pick an unused url on webtail.me like http://webtail.me/ox/523433
 
 Point a browser or curl at that url
 
-    `curl http://webtail.me/ox/523433`
+    curl http://webtail.me/ox/523433
     
 Start tailing
   
-    `tail -1000lf logfile.txt | webtail --url http://webtail.me/ox/523433`
+    tail -1000lf logfile.txt | webtail --url http://webtail.me/ox/523433
 
 For HTTPS, right now you need to use http://webtail.jit.su.
 

@@ -46,7 +46,8 @@ To generate new random paths, use the --new flag:
 
 
 Options:
-  --new  If specified, a new random path will be created under the path specified by --url
+  --new  If specified, a new random path will be created under the given
+         url.
 ```
 
 ### Tools

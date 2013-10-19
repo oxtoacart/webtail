@@ -23,9 +23,10 @@ var http = require('http')
               .options({
                 'new': {
                   boolean: true,
-                  describe: 'If specified, a new random path will be created under the path specified by --url'
+                  describe: 'If specified, a new random path will be created under the given url.'
                 }
               })
+              .wrap(80)
   , argv = optimist.argv
   , Tail = require('tail').Tail;
 

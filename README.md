@@ -12,19 +12,42 @@ Requires [nodejs](http://nodejs.org/)
 
 `npm install -g webtail`
 
-## Usage
+## Quick Start
 
-Pick an unused url on webtail.me like http://webtail.me/ox/523433
+Start tailing
 
+    > webtail http://webtail.me/ox/
+    tailing to http://webtail.me/ox/3426f2b6
+    
 Point a browser or curl at that url
 
-    curl http://webtail.me/ox/523433
+    curl http://webtail.me/ox/3426f2b6
     
-Start tailing
-  
-    tail -1000lf logfile.txt | webtail --url http://webtail.me/ox/523433
+For HTTPS, right now you need to use https://webtail.jit.su.  We hope to support
+https://webtail.me soon.
 
-For HTTPS, right now you need to use http://webtail.jit.su.
+## Usage
+
+```
+Usage: node ./webtail.js [--new] [url_to_webtail] [file_to_tail]
+
+webtail can either be used by piping data to it:
+
+  > tail -100lf myfile.txt | webtail http://webtail.me/ox/myfile.txt
+
+or it can read the file directly, in which case it behaves like tail -f:
+
+  > webtail http://webtail.me/ox/myfile.txt myfile.txt
+
+To generate new random paths, using the --new flag:
+
+  > webtail --new http://webtail.me/ox myfile
+  tailing to http://webtail.me/ox/3426f2b6
+
+
+Options:
+  --new  If specified, a new random path will be created under the path specified by --url
+```
 
 ### Tools
 

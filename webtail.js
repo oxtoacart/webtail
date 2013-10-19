@@ -1,21 +1,20 @@
 #!/usr/bin/env node 
 
 var usage = hereDoc(function() {/*!
-    Usage: $0 [--new] [url_to_webtail] [file_to_tail]
-    
-    webtail can either be used by piping data to it:
-    
-      > tail -100lf myfile.txt | webtail http://webtail.me/ox/myfile.txt
-    
-    
-    or it can read the file directly, in which case it behaves like tail -f:
+Usage: $0 [--new] [url_to_webtail] [file_to_tail]
 
-      > webtail http://webtail.me/ox/myfile.txt myfile.txt
-        
-    To generate new random paths, using the --new flag:
+webtail can either be used by piping data to it:
+
+  > tail -100lf myfile.txt | webtail http://webtail.me/ox/myfile.txt
+
+or it can read the file directly, in which case it behaves like tail -f:
+
+  > webtail http://webtail.me/ox/myfile.txt myfile.txt
     
-      > webtail --new http://webtail.me/ox myfile
-      tailing to http://webtail.me/ox/3426f2b6
+To generate new random paths, using the --new flag:
+
+  > webtail --new http://webtail.me/ox myfile
+  tailing to http://webtail.me/ox/3426f2b6
 */});
 
 var http = require('http')

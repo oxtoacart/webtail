@@ -39,7 +39,7 @@ or it can read the file directly, in which case it behaves like tail -f:
 
   > webtail http://webtail.me/ox/myfile.txt myfile.txt
 
-To generate new random paths, using the --new flag:
+To generate new random paths, use the --new flag:
 
   > webtail --new http://webtail.me/ox myfile
   tailing to http://webtail.me/ox/3426f2b6

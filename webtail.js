@@ -1,43 +1,71 @@
 #!/usr/bin/env node 
 
-var argv = require('optimist')
-            .usage('Usage: $0 --url [url to webtail]')
-            .demand(['url'])
-            .argv;
+var http = require('http')
+  , argv = require('optimist')
+            .usage('Usage: $0 --url [url to webtail] --new [file_to_tail]')
+            .boolean('new')
+            .demand('url')
+            .argv
+  , Tail = require('tail').Tail;
 
 var urlRegex = /(https?:\/\/?[^/]+)\/(.+)/;
 
-configureReader(connect());
-
-function connect() {
-  var url = argv.url;
-  var parsedUrl = parseUrl(url);
-  var socket = require('socket.io-client').connect(parsedUrl.server);
-  socket.on('ready', function() {
-    console.log('Tailing to ', url);
-    process.stdin.resume();
-  });
-  socket.emit('id', parsedUrl.id);
-  return socket;
+if (argv._.length > 0) {
+  connectAndThen(readFromFile);
+} else {
+  connectAndThen(readFromStdIn);
 }
 
-function parseUrl(url) {
-  var match = urlRegex.exec(url);
-  if (!match) {
-    console.log("Please supply a valid url like 'http://webtail.me/Ad23Df3d'");
-    process.exit(1);
+function connectAndThen(fn) {
+  if (argv['new']) {
+    obtainUrlAndThen(fn);
+  } else {
+    prepareToStreamAndThen(argv.url, fn);
   }
-  return {
-    server: match[1],
-    id: match[2]
-  };
 }
 
-function configureReader(socket) {
+function obtainUrlAndThen(fn) {
+  var requestOptions = require('url').parse(argv.url + "?new");
+  requestOptions.method = 'POST';
+  var request = http.request(requestOptions, function(response) {
+    if (response.statusCode != 307) {
+      console.error("Got unexpected response", response);
+    } else {
+      var newUrl = requestOptions.protocol + "//"
+                   + requestOptions.host + "/"
+                   + response.headers.location;
+      console.log("Tailing to " + newUrl);
+      prepareToStreamAndThen(newUrl, fn);
+    }
+  });
+  request.on('error', function(error) {
+    console.log(error.message);
+    process.exit(1);
+  });
+  request.end();
+}
+
+function prepareToStreamAndThen(url, fn) {
+  var requestOptions = require('url').parse(url);
+  requestOptions.method = 'POST';
+  var request = http.request(requestOptions);
+  request.on('error', function(error) {
+    console.log(error.message);
+    process.exit(1);
+  });
+  fn(request);
+}
+
+function readFromFile(httpRequest) {
+  new Tail(argv._[0]).on("line", function(line) {
+    httpRequest.write(line);
+    httpRequest.write("\n");
+  });
+}
+
+function readFromStdIn(httpRequest) {
   process.stdin.setEncoding('utf8');
   process.stdin.on('data', function (chunk) {
-    chunk.split("\n").forEach(function(line) {
-      socket.emit('chunk', line);
-    });
+    httpRequest.write(chunk);
   });
 }

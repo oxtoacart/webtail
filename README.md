@@ -10,7 +10,7 @@ webtail.me allows you to tail files to the web for sharing with other people.
 
 Requires [nodejs](http://nodejs.org/)
 
-`npm install webtail`
+`npm install -g webtail`
 
 ## Usage
 

@@ -16,12 +16,12 @@ Requires [nodejs](http://nodejs.org/)
 
 Start tailing
 
-    > webtail http://webtail.me/ox/
+    > webtail http://webtail.me/ox/ myfile.txt
     tailing to http://webtail.me/ox/3426f2b6
     
 Point a browser or curl at that url
 
-    curl http://webtail.me/ox/3426f2b6
+    > curl http://webtail.me/ox/3426f2b6
     
 For HTTPS, right now you need to use https://webtail.jit.su.  We hope to support
 https://webtail.me soon.
@@ -29,7 +29,7 @@ https://webtail.me soon.
 ## Usage
 
 ```
-Usage: node ./webtail.js [--new] [url_to_webtail] [file_to_tail]
+Usage: webtail [--new] [url_to_webtail] [file_to_tail]
 
 webtail can either be used by piping data to it:
 

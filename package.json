@@ -1,6 +1,6 @@
 {
   "name": "webtail",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "Ox Cart <ox.to.a.cart@gmail.com>",
   "license": "BSD",
   "description": "Client for webtail.me",
@@ -19,7 +19,7 @@
   ],
   "dependencies": {
     "optimist": "0.6.0",
-    "tail": "0.3.1"
+    "read": "1.0.5"
   },
   "engines": {
     "node": "0.10.x"

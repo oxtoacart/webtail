@@ -29,7 +29,7 @@ https://webtail.me soon.
 ## Usage
 
 ```
-Usage: webtail [--new] [url_to_webtail] [file_to_tail]
+Usage: webtail [--new] url_to_webtail [file_to_tail]
 
 webtail can either be used by piping data to it:
 

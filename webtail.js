@@ -12,17 +12,17 @@ WW  WW  WW EE      BB    BB    TT   AA     AA  II  LL      DOT MM     MM EE
 
 
 Usage: $0 [--new] url_to_webtail [file_to_tail]
-   or: $0 login
+   or: $0 login [access_token]
    
-$0 login has to be run at least once to set the authorization token
+$0 login has to be run at least once to set the access token
 
 $0 can either be used by piping data to it:
 
-  > tail -100lf myfile.txt | $0 http://webtail.me/ox/myfile.txt
+  > tail -100lf mylogfile.txt | $0 http://webtail.me/ox/mylogfile.txt
 
 or it can read the file directly, in which case it behaves like tail -f:
 
-  > $0 http://webtail.me/ox/myfile.txt myfile.txt
+  > $0 http://webtail.me/ox/mylogfile.txt mylogfile.txt
     
 To generate new random paths, use the --new flag:
 
@@ -43,7 +43,7 @@ var http = require('http')
   , argv = optimist.argv
   , read = require('read')
   , fs = require('fs')
-  , writeToken = null
+  , accessToken = null
   , URL_REGEX = /(https?:\/\/?[^/]+)\/(.+)/
   , TOKEN_PATH = getUserHome() + '/.webtail_token';
   
@@ -55,34 +55,42 @@ if (argv._.length == 0) {
 var serverUrl = argv._[0];
 
 if (argv._[0] === 'login') {
-  login();
+  login(argv._);
 } else {
   readTokenAndThenWrite();
 }
 
-function login() {
-  read({ prompt: 'Enter you webtail.me token: ' }, function(err, token) {
-    if (err && err.toString() === 'Error: canceled') {
-      process.exit(2);
-    }
-    fs.writeFile(TOKEN_PATH, token, function(err) {
-      if (err) {
-          console.error('Unable to save token: ' + err);
-      } else {
-          console.log("Token saved");
+function login(args) {
+  if (args.length > 1) {
+    saveToken(args[1]);
+  } else {
+    read({ prompt: 'Enter you webtail.me access token: ' }, function(err, token) {
+      if (err && err.toString() === 'Error: canceled') {
+        process.exit(2);
       }
-    }); 
+      saveToken(token);
+    });
+  }
+}
+
+function saveToken(token) {
+  fs.writeFile(TOKEN_PATH, token, function(err) {
+    if (err) {
+        console.error('Unable to save access token: ' + err);
+    } else {
+        console.log("Access token saved");
+    }
   });
 }
 
 function readTokenAndThenWrite() {
-  fs.readFile(TOKEN_PATH, function(err, readToken) {
+  fs.readFile(TOKEN_PATH, function(err, tokenFromDisk) {
     if (err) {
-      console.error("Unable to read token, please run 'webtail login'\n" + err);
+      console.error("Unable to read access token, please run 'webtail login'\n" + err);
     } else {
-      writeToken = readToken.toString();
-      if (!writeToken) {
-        console.error("Token was empty, please run 'webtail login'");
+      accessToken = tokenFromDisk.toString();
+      if (!accessToken) {
+        console.error("Access token was empty, please run 'webtail login'");
       } else {
         if (argv._.length > 1) {
           connectAndThen(readFromFile);
@@ -105,9 +113,18 @@ function connectAndThen(fn) {
 function obtainUrlAndThen(fn) {
   var requestOptions = require('url').parse(serverUrl + "?new");
   requestOptions.method = 'POST';
+  requestOptions.headers = {
+    'x-webtail-access-token': accessToken
+  };
   var request = http.request(requestOptions, function(response) {
     if (response.statusCode != 307) {
-      console.error("Got unexpected response", response);
+      if (response.statusCode == 401) {
+        console.error("Authentication error.  Please check your access token and login again.");
+        process.exit(6);
+      } else {
+        console.error("Got unexpected response status", response.statusCode);
+        process.exit(5);
+      }
     } else {
       var newUrl = requestOptions.protocol + "//"
                    + requestOptions.host + "/"
@@ -126,7 +143,20 @@ function obtainUrlAndThen(fn) {
 function prepareToStreamAndThen(url, fn) {
   var requestOptions = require('url').parse(url);
   requestOptions.method = 'POST';
-  var request = http.request(requestOptions);
+  requestOptions.headers = {
+    'x-webtail-access-token': accessToken
+  };
+  var request = http.request(requestOptions, function(response) {
+    if (response.statusCode != 307) {
+      if (response.statusCode == 401) {
+        console.error("Authentication error.  Please check your access token and login again.");
+        process.exit(6);
+      } else {
+        console.error("Got unexpected response status", response.statusCode);
+        process.exit(5);
+      }
+    }
+  });
   request.on('error', function(err) {
     console.error('Unable to send data: ' + err.message);
     process.exit(4);

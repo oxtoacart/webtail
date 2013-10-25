@@ -16,7 +16,7 @@ Requires [nodejs](http://nodejs.org/)
 
 Start tailing
 
-    > webtail http://webtail.me/ox/ myfile.txt
+    > webtail http://webtail.me/ox/ mylogfile.txt
     tailing to http://webtail.me/ox/3426f2b6
     
 Point a browser or curl at that url
@@ -33,11 +33,11 @@ Usage: webtail [--new] url_to_webtail [file_to_tail]
 
 webtail can either be used by piping data to it:
 
-  > tail -100lf myfile.txt | webtail http://webtail.me/ox/myfile.txt
+  > tail -100lf mylogfile.txt | webtail http://webtail.me/ox/mylogfile.txt
 
 or it can read the file directly, in which case it behaves like tail -f:
 
-  > webtail http://webtail.me/ox/myfile.txt myfile.txt
+  > webtail http://webtail.me/ox/mylogfile.txt mylogfile.txt
 
 To generate new random paths, use the --new flag:
 

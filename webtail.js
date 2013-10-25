@@ -117,21 +117,12 @@ function obtainUrlAndThen(fn) {
     'x-webtail-access-token': accessToken
   };
   var request = http.request(requestOptions, function(response) {
-    if (response.statusCode != 307) {
-      if (response.statusCode == 401) {
-        console.error("Authentication error.  Please check your access token and login again.");
-        process.exit(6);
-      } else {
-        console.error("Got unexpected response status", response.statusCode);
-        process.exit(5);
-      }
-    } else {
-      var newUrl = requestOptions.protocol + "//"
-                   + requestOptions.host + "/"
-                   + response.headers.location;
-      console.log("tailing to " + newUrl);
-      prepareToStreamAndThen(newUrl, fn);
-    }
+    checkResponseStatus(response);
+    var newUrl = requestOptions.protocol + "//"
+                 + requestOptions.host + "/"
+                 + response.headers.location;
+    console.log("tailing to " + newUrl);
+    prepareToStreamAndThen(newUrl, fn);
   });
   request.on('error', function(err) {
     console.error('Unable to create new url: ' + err.message);
@@ -147,21 +138,25 @@ function prepareToStreamAndThen(url, fn) {
     'x-webtail-access-token': accessToken
   };
   var request = http.request(requestOptions, function(response) {
-    if (response.statusCode != 307) {
-      if (response.statusCode == 401) {
-        console.error("Authentication error.  Please check your access token and login again.");
-        process.exit(6);
-      } else {
-        console.error("Got unexpected response status", response.statusCode);
-        process.exit(5);
-      }
-    }
+    checkResponseStatus(response);
   });
   request.on('error', function(err) {
     console.error('Unable to send data: ' + err.message);
     process.exit(4);
   });
   fn(request);
+}
+
+function checkResponseStatus(response) {
+  if (response.statusCode != 307) {
+    if (response.statusCode == 401) {
+      console.error("Authentication error.  Please check your access token and login again.");
+      process.exit(6);
+    } else {
+      console.error("Got unexpected response status", response.statusCode);
+      process.exit(5);
+    }
+  }
 }
 
 function readFromFile(httpRequest) {

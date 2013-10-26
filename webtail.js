@@ -18,29 +18,33 @@ $0 login has to be run at least once to set the access token
 
 $0 can either be used by piping data to it:
 
-  > tail -100lf mylogfile.txt | $0 http://webtail.me/ox/mylogfile.txt
+  > tail -100lf log.txt | $0 https://webtail.me/ox/log.txt
 
 or it can read the file directly, in which case it behaves like tail -f:
 
-  > $0 http://webtail.me/ox/mylogfile.txt mylogfile.txt
+  > $0 https://webtail.me/ox/log.txt log.txt
     
 To generate new random paths, use the --new flag:
 
-  > $0 --new http://webtail.me/ox myfile
-  tailing to http://webtail.me/ox/3426f2b6
+  > $0 --new https://webtail.me/ox myfile
+  tailing to https://webtail.me/ox/3426f2b6
 */});
 
-var http = require('http')
-  , optimist = require('optimist')
+var optimist = require('optimist')
               .usage(usage)
               .options({
                 'new': {
                   boolean: true,
                   describe: 'If specified, a new random path will be created under the given url.'
+                },
+                'insecure': {
+                  boolean: true,
+                  describe: 'If specified, all server certificates will be trusted.  Typically only used for testing with local server.'
                 }
               })
               .wrap(80)
   , argv = optimist.argv
+  , https = require('https')
   , read = require('read')
   , fs = require('fs')
   , accessToken = null
@@ -116,7 +120,8 @@ function obtainUrlAndThen(fn) {
   requestOptions.headers = {
     'x-webtail-access-token': accessToken
   };
-  var request = http.request(requestOptions, function(response) {
+  requestOptions.rejectUnauthorized = !(argv.insecure === true);
+  var request = https.request(requestOptions, function(response) {
     checkResponseStatus(response);
     var newUrl = requestOptions.protocol + "//"
                  + requestOptions.host + "/"
@@ -137,7 +142,8 @@ function prepareToStreamAndThen(url, fn) {
   requestOptions.headers = {
     'x-webtail-access-token': accessToken
   };
-  var request = http.request(requestOptions, function(response) {
+  requestOptions.rejectUnauthorized = !(argv.insecure === true);
+  var request = https.request(requestOptions, function(response) {
     checkResponseStatus(response);
   });
   request.on('error', function(err) {

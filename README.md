@@ -16,38 +16,49 @@ Requires [nodejs](http://nodejs.org/)
 
 Start tailing
 
-    > webtail http://webtail.me/ox/ mylogfile.txt
-    tailing to http://webtail.me/ox/3426f2b6
+    > webtail --new https://webtail.me/ox/ mylogfile.txt
+    tailing to https://webtail.me/ox/3426f2b6
     
 Point a browser or curl at that url
 
-    > curl http://webtail.me/ox/3426f2b6
+    > curl https://webtail.me/ox/3426f2b6
     
-For HTTPS, right now you need to use https://webtail.jit.su.  We hope to support
-https://webtail.me soon.
-
 ## Usage
 
 ```
-Usage: webtail [--new] url_to_webtail [file_to_tail]
+WW      WW EEEEEEE BBBBBBB  TTTTTTTT   AAA    IIII LL          MM     MM EEEEEEE
+WW  WW  WW EE      BB    BB    TT     AA AA    II  LL          MMM   MMM EE
+WW  WW  WW EE      BB    BB    TT    AA   AA   II  LL          MMMM MMMM EE
+WW  WW  WW EEEEE   BBBBBBB     TT   AA     AA  II  LL          MM MMM MM EEEEE
+WW  WW  WW EE      BB    BB    TT   AAAAAAAAA  II  LL          MM     MM EE
+WW  WW  WW EE      BB    BB    TT   AA     AA  II  LL      DOT MM     MM EE
+ WWW  WWW  EEEEEEE BBBBBBB     TT   AA     AA IIII LLLLLLL TOD MM     MM EEEEEEE
 
-webtail can either be used by piping data to it:
 
-  > tail -100lf mylogfile.txt | webtail http://webtail.me/ox/mylogfile.txt
+Usage: node ./webtail.js [--new] url_to_webtail [file_to_tail]
+   or: node ./webtail.js login [access_token]
+
+node ./webtail.js login has to be run at least once to set the access token
+
+node ./webtail.js can either be used by piping data to it:
+
+  > tail -100lf log.txt | node ./webtail.js https://webtail.me/ox/log.txt
 
 or it can read the file directly, in which case it behaves like tail -f:
 
-  > webtail http://webtail.me/ox/mylogfile.txt mylogfile.txt
+  > node ./webtail.js https://webtail.me/ox/log.txt log.txt
 
 To generate new random paths, use the --new flag:
 
-  > webtail --new http://webtail.me/ox myfile
-  tailing to http://webtail.me/ox/3426f2b6
+  > node ./webtail.js --new https://webtail.me/ox myfile
+  tailing to https://webtail.me/ox/3426f2b6
 
 
 Options:
-  --new  If specified, a new random path will be created under the given
-         url.
+  --new       If specified, a new random path will be created under the given
+              url.
+  --insecure  If specified, all server certificates will be trusted.  Typically
+              only used for testing with local server.
 ```
 
 ### Tools

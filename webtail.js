@@ -156,7 +156,7 @@ function prepareToStreamAndThen(url, fn) {
 function checkResponseStatus(response) {
   if (response.statusCode != 307) {
     if (response.statusCode == 401) {
-      console.error("Authentication error.  Please check your access token and login again.");
+      console.error("Authentication error.  Make sure that your base path and access token match those given to you by webtail.me.");
       process.exit(6);
     } else {
       console.error("Got unexpected response status", response.statusCode);

@@ -36,7 +36,7 @@ WW  WW  WW EE      BB    BB    TT   AA     AA  II  LL      DOT MM     MM EE
 
 
 Usage: node ./webtail.js [--new] url_to_webtail [file_to_tail]
-   or: node ./webtail.js login [access_token]
+   or: node ./webtail.js login access_token
 
 node ./webtail.js login has to be run at least once to set the access token
 

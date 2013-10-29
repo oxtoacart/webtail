@@ -12,7 +12,7 @@ WW  WW  WW EE      BB    BB    TT   AA     AA  II  LL      DOT MM     MM EE
 
 
 Usage: $0 [--new] url_to_webtail [file_to_tail]
-   or: $0 login [access_token]
+   or: $0 login access_token
    
 $0 login has to be run at least once to set the access token
 
@@ -45,7 +45,6 @@ var optimist = require('optimist')
               .wrap(80)
   , argv = optimist.argv
   , https = require('https')
-  , read = require('read')
   , fs = require('fs')
   , accessToken = null
   , URL_REGEX = /(https?:\/\/?[^/]+)\/(.+)/
@@ -68,12 +67,8 @@ function login(args) {
   if (args.length > 1) {
     saveToken(args[1]);
   } else {
-    read({ prompt: 'Enter you webtail.me access token: ' }, function(err, token) {
-      if (err && err.toString() === 'Error: canceled') {
-        process.exit(2);
-      }
-      saveToken(token);
-    });
+    optimist.showHelp();
+    process.exit(2);
   }
 }
 
